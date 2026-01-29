@@ -15,8 +15,6 @@
     button { background-color: #4CAF50; color: white; border: none; cursor: pointer; transition: background 0.3s; }
     button:hover { background-color: #45a049; }
     footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
-    .flex-row { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .flex-row input, .flex-row select { flex: 1; min-width: 120px; }
     @media (max-width: 500px) { main { margin: 1rem; padding: 1rem; } }
   </style>
 </head>
@@ -32,7 +30,7 @@
       <input type="text" placeholder="Item Name" required>
       <textarea placeholder="Item Description" rows="3" required></textarea>
       <input type="number" placeholder="Rental Price per Day (€)" min="0" required>
-      <input type="number" placeholder="Deposit (€)" min="0" value="0" required>
+      <input type="number" placeholder="Deposit (e.g., €0 or optional security deposit)" min="0">
       <select required>
         <option value="">Select Category</option>
         <option value="tools">Tools</option>
@@ -45,12 +43,6 @@
         <input type="checkbox" id="pickupCheckbox">
         Allow Dropoff/Pickup
       </label>
-      <input type="number" placeholder="Dropoff/Pickup Price (€)" min="0" id="pickupPrice" disabled>
-
-      <div class="flex-row">
-        <input type="date" id="startDate" required>
-        <input type="date" id="endDate" required>
-      </div>
 
       <button type="submit">List Item</button>
     </form>
@@ -62,35 +54,10 @@
 
   <script>
     const form = document.getElementById('rentalForm');
-    const pickupCheckbox = document.getElementById('pickupCheckbox');
-    const pickupPrice = document.getElementById('pickupPrice');
-
-    // Enable/disable pickup price field
-    pickupCheckbox.addEventListener('change', () => {
-      pickupPrice.disabled = !pickupCheckbox.checked;
-      if(!pickupCheckbox.checked) pickupPrice.value = '';
-    });
-
-    // Form submit
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-
-      // Validate start/end date (allow same day)
-      const start = document.getElementById('startDate').value;
-      const end = document.getElementById('endDate').value;
-      if (!start || !end) {
-        alert('Please select start and end dates');
-        return;
-      }
-
-      if (end < start) {
-        alert('End date cannot be before start date');
-        return;
-      }
-
       alert('Item listed! (Functionality to be connected to backend)');
       form.reset();
-      pickupPrice.disabled = true;
     });
   </script>
 
