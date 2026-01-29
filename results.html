@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results - TePresto</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+    header { background: #4CAF50; color: white; text-align: center; padding: 2rem 1rem; }
+    main { max-width: 800px; margin: 2rem auto; padding: 1rem; }
+    h1 { margin-bottom: 1rem; }
+    .results { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    .result-item { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-width: 200px; text-align: center; }
+    footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
+    @media (max-width: 500px) { .result-item { min-width: 100%; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Search Results</h1>
+</header>
+
+<main>
+  <div id="resultsContainer" class="results"></div>
+</main>
+
+<footer>
+  &copy; 2026 TePresto. All rights reserved.
+</footer>
+
+<script>
+  // Dummy listings data
+  const listings = [
+    { name: "Drill", price: 5 },
+    { name: "Vacuum Cleaner", price: 3 },
+    { name: "Camera", price: 10 },
+    { name: "Ladder", price: 4 },
+    { name: "Power Washer", price: 8 },
+    { name: "Tent", price: 6 }
+  ];
+
+  // Read query from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('query')?.toLowerCase() || '';
+
+  const resultsContainer = document.getElementById('resultsContainer');
+
+  function displayResults(results) {
+    resultsContainer.innerHTML = '';
+    if(results.length === 0){
+      resultsContainer.innerHTML = '<p>No items found.</p>';
+      return;
+    }
+    results.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'result-item';
+      div.textContent = `${item.name} - €${item.price}/day`;
+      resultsContainer.appendChild(div);
+    });
+  }
+
+  // Filter listings based on search query
+  const filtered = listings.filter(item => item.name.toLowerCase().includes(query));
+  displayResults(filtered);
+</script>
+
+</body>
+</html>
