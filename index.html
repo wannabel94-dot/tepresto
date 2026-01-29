@@ -8,15 +8,32 @@
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
     header { background: #4CAF50; color: white; text-align: center; padding: 2rem 1rem; }
     header h1 { margin-bottom: 0.5rem; font-size: 2.2rem; }
-    main { max-width: 600px; margin: 2rem auto; padding: 1rem; text-align: center; }
+    main { max-width: 900px; margin: 2rem auto; padding: 0 1rem; text-align: center; }
     .cta-button { display: inline-block; padding: 1rem 2rem; font-size: 1.2rem; background: #4CAF50; color: white; border-radius: 8px; text-decoration: none; transition: background 0.3s; margin-bottom: 2rem; }
     .cta-button:hover { background: #45a049; }
-    .search-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+
+    .search-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
     .search-bar input[type="text"] { flex: 1; padding: 0.8rem; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; min-width: 150px; }
     .search-bar button { padding: 0.8rem 1.5rem; font-size: 1rem; border-radius: 5px; border: none; background: #4CAF50; color: white; cursor: pointer; transition: background 0.3s; }
     .search-bar button:hover { background: #45a049; }
+
+    .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 2rem; }
+    .categories button { padding: 0.8rem 1.5rem; border-radius: 5px; border: none; background: #2196F3; color: white; cursor: pointer; transition: background 0.3s; }
+    .categories button:hover { background: #1976D2; }
+
+    .banner { background-color: #e0f7e9; padding: 2rem 0; overflow: hidden; position: relative; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 3rem; }
+    .banner-items { display: flex; gap: 2rem; white-space: nowrap; animation: scroll 20s linear infinite; }
+    .banner-item { background-color: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-width: 200px; flex: 0 0 auto; text-align: center; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
     footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
-    @media (max-width: 500px) { .search-bar { flex-direction: column; } .cta-button { width: 100%; margin-bottom: 1rem; } }
+
+    @media (max-width: 500px) {
+      .cta-button { width: 100%; margin-bottom: 1rem; }
+      .search-bar { flex-direction: column; }
+      .categories button { flex: 1 1 100%; }
+      .banner-item { min-width: 150px; }
+    }
   </style>
 </head>
 <body>
@@ -27,11 +44,37 @@
 </header>
 
 <main>
+  <!-- List Item CTA -->
   <a href="listing.html" class="cta-button">List an Item</a>
 
+  <!-- Search bar -->
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search for an item to rent...">
     <button id="searchBtn">Search</button>
+  </div>
+
+  <!-- Categories -->
+  <div class="categories">
+    <button data-category="tools">Tools</button>
+    <button data-category="electronics">Electronics</button>
+    <button data-category="cleaning">Cleaning Equipment</button>
+    <button data-category="other">Other</button>
+  </div>
+
+  <!-- Scrolling banner -->
+  <h2>Current Listings</h2>
+  <div class="banner">
+    <div class="banner-items">
+      <div class="banner-item">Drill - €5/day</div>
+      <div class="banner-item">Vacuum Cleaner - €3/day</div>
+      <div class="banner-item">Camera - €10/day</div>
+      <div class="banner-item">Ladder - €4/day</div>
+      <div class="banner-item">Power Washer - €8/day</div>
+      <div class="banner-item">Tent - €6/day</div>
+      <!-- Repeat for smooth scrolling -->
+      <div class="banner-item">Drill - €5/day</div>
+      <div class="banner-item">Vacuum Cleaner - €3/day</div>
+    </div>
   </div>
 </main>
 
@@ -40,21 +83,26 @@
 </footer>
 
 <script>
+  // Search functionality → redirect to results.html
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.getElementById('searchBtn');
 
-  function goToResults() {
-    const query = encodeURIComponent(searchInput.value.trim());
-    if(query) {
-      window.location.href = `results.html?query=${query}`;
-    } else {
-      alert('Please enter a search term.');
-    }
+  function goToResults(queryParam) {
+    const query = encodeURIComponent(queryParam.trim());
+    if(query) window.location.href = `results.html?query=${query}`;
+    else alert('Please enter a search term.');
   }
 
-  searchBtn.addEventListener('click', goToResults);
-  searchInput.addEventListener('keypress', e => {
-    if(e.key === 'Enter') goToResults();
+  searchBtn.addEventListener('click', () => goToResults(searchInput.value));
+  searchInput.addEventListener('keypress', e => { if(e.key === 'Enter') goToResults(searchInput.value); });
+
+  // Category buttons
+  const categoryButtons = document.querySelectorAll('.categories button');
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-category');
+      window.location.href = `results.html?category=${category}`;
+    });
   });
 </script>
 
