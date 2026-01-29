@@ -15,7 +15,9 @@
     button { background-color: #4CAF50; color: white; border: none; cursor: pointer; transition: background 0.3s; }
     button:hover { background-color: #45a049; }
     footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
-    @media (max-width: 500px) { main { margin: 1rem; padding: 1rem; } }
+    #imagePreview { display: flex; gap: 1rem; flex-wrap: wrap; }
+    #imagePreview img { width: 100px; height: 100px; object-fit: cover; border-radius: 5px; }
+    @media (max-width: 500px) { main { margin: 1rem; padding: 1rem; } #imagePreview img { width: 80px; height: 80px; } }
   </style>
 </head>
 <body>
@@ -44,6 +46,13 @@
         Allow Dropoff/Pickup
       </label>
 
+      <!-- Image upload -->
+      <label>
+        Upload Images (at least 1 required):
+        <input type="file" id="imageUpload" accept="image/*" multiple required>
+      </label>
+      <div id="imagePreview"></div>
+
       <button type="submit">List Item</button>
     </form>
   </main>
@@ -54,10 +63,36 @@
 
   <script>
     const form = document.getElementById('rentalForm');
+    const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+
+    // Preview uploaded images
+    imageUpload.addEventListener('change', () => {
+      imagePreview.innerHTML = '';
+      const files = Array.from(imageUpload.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // Ensure at least one image is uploaded
+      if(imageUpload.files.length === 0){
+        alert('Please upload at least one image.');
+        return;
+      }
+
       alert('Item listed! (Functionality to be connected to backend)');
       form.reset();
+      imagePreview.innerHTML = '';
     });
   </script>
 
