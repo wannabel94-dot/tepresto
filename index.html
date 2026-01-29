@@ -22,24 +22,16 @@ main { max-width:900px; margin:2rem auto; padding:0 1rem; text-align:center; }
 .categories button:hover { background:#1976D2; }
 
 .banner { background:#e0f7e9; padding:2rem 0; overflow:hidden; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin-top:3rem; }
-.banner-items { display:flex; gap:2rem; white-space:nowrap; animation:scroll 20s linear infinite; }
-.banner-item { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.1); min-width:200px; flex:0 0 auto; text-align:center; }
+.banner-items { display:flex; gap:1rem; white-space:nowrap; animation:scroll 20s linear infinite; }
 @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+.polaroid { display:flex; flex-direction:column; align-items:center; min-width:150px; background:white; padding:0.5rem; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+.polaroid img { width:150px; height:150px; object-fit:cover; border-radius:5px; }
+.polaroid p { margin:0.3rem 0 0 0; font-size:0.9rem; text-align:center; }
 
 footer { text-align:center; margin:2rem 0; font-size:0.9rem; color:#777; }
 
-@media(max-width:500px){ .cta-button{ width:100%; margin-bottom:1rem; } .search-bar{ flex-direction:column; } .categories button{ flex:1 1 100%; } .banner-item{ min-width:150px; } }
-
-/* Modal styles */
-.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.5); }
-.modal-content { background:#fff; margin:10% auto; padding:2rem; border-radius:8px; width:90%; max-width:400px; position:relative; }
-.modal-content h2 { margin-bottom:1rem; }
-.modal-content input { width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:5px; border:1px solid #ccc; }
-.modal-content button { padding:0.8rem 1.5rem; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer; transition:background 0.3s; }
-.modal-content button:hover { background:#45a049; }
-.modal-content .close { position:absolute; top:10px; right:15px; font-size:1.5rem; cursor:pointer; color:#333; }
-.modal-content .create-profile { background:#2196F3; margin-top:0.5rem; }
-.modal-content .create-profile:hover { background:#1976D2; }
+@media(max-width:500px){ .cta-button{ width:100%; margin-bottom:1rem; } .search-bar{ flex-direction:column; } .categories button{ flex:1 1 100%; } .banner-items{ gap:0.5rem; } .polaroid img{ width:100px; height:100px; } .polaroid{ min-width:120px; } }
 </style>
 </head>
 <body>
@@ -50,12 +42,12 @@ footer { text-align:center; margin:2rem 0; font-size:0.9rem; color:#777; }
 </header>
 
 <main>
-  <!-- List Item CTA triggers login -->
   <div class="cta-button" id="listItemBtn">List an Item</div>
 
   <!-- Search bar -->
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search for an item to rent...">
+    <input type="text" id="searchLocation" placeholder="Location (optional)">
     <button id="searchBtn">Search</button>
   </div>
 
@@ -70,16 +62,7 @@ footer { text-align:center; margin:2rem 0; font-size:0.9rem; color:#777; }
   <!-- Scrolling banner -->
   <h2>Current Listings</h2>
   <div class="banner">
-    <div class="banner-items">
-      <div class="banner-item">Drill - €5/day</div>
-      <div class="banner-item">Vacuum Cleaner - €3/day</div>
-      <div class="banner-item">Camera - €10/day</div>
-      <div class="banner-item">Ladder - €4/day</div>
-      <div class="banner-item">Power Washer - €8/day</div>
-      <div class="banner-item">Tent - €6/day</div>
-      <div class="banner-item">Drill - €5/day</div>
-      <div class="banner-item">Vacuum Cleaner - €3/day</div>
-    </div>
+    <div class="banner-items" id="bannerItems"></div>
   </div>
 </main>
 
@@ -100,35 +83,62 @@ footer { text-align:center; margin:2rem 0; font-size:0.9rem; color:#777; }
 </div>
 
 <script>
-  // Redirect search to results.html
-  const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
-
-  function goToResults(queryParam) {
-    const query = encodeURIComponent(queryParam.trim());
-    if(query) window.location.href = `results.html?query=${query}`;
-    else alert('Please enter a search term.');
-  }
-
-  searchBtn.addEventListener('click', () => goToResults(searchInput.value));
-  searchInput.addEventListener('keypress', e => { if(e.key==='Enter') goToResults(searchInput.value); });
-
-  // Categories buttons
-  document.querySelectorAll('.categories button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const category = btn.getAttribute('data-category');
-      window.location.href = `results.html?category=${category}`;
-    });
+// Search functionality
+function goToResults() {
+  const query = encodeURIComponent(document.getElementById('searchInput').value.trim());
+  const location = encodeURIComponent(document.getElementById('searchLocation').value.trim());
+  let url = `results.html?query=${query}`;
+  if(location) url += `&location=${location}`;
+  window.location.href = url;
+}
+document.getElementById('searchBtn').addEventListener('click', goToResults);
+document.getElementById('searchInput').addEventListener('keypress', e=>{ if(e.key==='Enter') goToResults(); });
+document.querySelectorAll('.categories button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const category = btn.getAttribute('data-category');
+    window.location.href = `results.html?category=${category}`;
   });
+});
 
-  // Login modal logic
-  const modal = document.getElementById('loginModal');
-  const listItemBtn = document.getElementById('listItemBtn');
-  const closeModal = document.getElementById('closeModal');
+// Login modal logic
+const modal = document.getElementById('loginModal');
+const listItemBtn = document.getElementById('listItemBtn');
+const closeModal = document.getElementById('closeModal');
+listItemBtn.addEventListener('click', () => modal.style.display='block');
+closeModal.addEventListener('click', () => modal.style.display='none');
+window.addEventListener('click', e => { if(e.target===modal) modal.style.display='none'; });
 
-  listItemBtn.addEventListener('click', () => modal.style.display='block');
-  closeModal.addEventListener('click', () => modal.style.display='none');
-  window.addEventListener('click', e => { if(e.target===modal) modal.style.display='none'; });
+// Banner dynamic listings
+const bannerItemsDiv = document.getElementById('bannerItems');
+let listings = JSON.parse(localStorage.getItem('listings')) || [];
+
+// For demo: fallback default listings
+if(listings.length === 0) {
+  listings = [
+    { name:"Drill", price:5, location:"Madrid" },
+    { name:"Vacuum Cleaner", price:3, location:"Barcelona" },
+    { name:"Camera", price:10, location:"Seville" },
+    { name:"Ladder", price:4, location:"Madrid" }
+  ];
+}
+
+// Populate banner
+function populateBanner(items){
+  bannerItemsDiv.innerHTML = '';
+  // Duplicate items to make scrolling seamless
+  const allItems = [...items, ...items];
+  allItems.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'polaroid';
+    div.innerHTML = `
+      <img src="https://via.placeholder.com/150" alt="${item.name}">
+      <p>${item.name}</p>
+      <p>€${item.price}/day - ${item.location}</p>
+    `;
+    bannerItemsDiv.appendChild(div);
+  });
+}
+populateBanner(listings);
 </script>
 
 </body>
