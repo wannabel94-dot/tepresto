@@ -13,69 +13,56 @@ h1 { margin-bottom: 1rem; }
 .result-item { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-width: 200px; text-align: center; }
 .result-item p { margin: 0.3rem 0; }
 footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
-@media (max-width: 500px) { .result-item { min-width: 100%; } }
+@media(max-width:500px){ .result-item{ min-width:100%; } }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Search Results</h1>
-</header>
-
+<header><h1>Search Results</h1></header>
 <main>
   <div id="resultsContainer" class="results"></div>
 </main>
-
-<footer>
-  &copy; 2026 TePresto. All rights reserved.
-</footer>
+<footer>&copy; 2026 TePresto. All rights reserved.</footer>
 
 <script>
-  // Demo listings with location
-  const listings = [
-    { name: "Drill", price: 5, location: "Madrid" },
-    { name: "Vacuum Cleaner", price: 3, location: "Barcelona" },
-    { name: "Camera", price: 10, location: "Seville" },
-    { name: "Ladder", price: 4, location: "Madrid" },
-    { name: "Power Washer", price: 8, location: "Valencia" },
-    { name: "Tent", price: 6, location: "Barcelona" }
+const resultsContainer = document.getElementById('resultsContainer');
+const urlParams = new URLSearchParams(window.location.search);
+const query = urlParams.get('query')?.toLowerCase() || '';
+const category = urlParams.get('category')?.toLowerCase() || '';
+const locationFilter = urlParams.get('location')?.toLowerCase() || '';
+
+let listings = JSON.parse(localStorage.getItem('listings')) || [];
+
+// For demo: prepopulate some default listings
+if(listings.length === 0) {
+  listings = [
+    { name: "Drill", price: 5, category:"tools", location: "Madrid" },
+    { name: "Vacuum Cleaner", price: 3, category:"cleaning", location: "Barcelona" },
+    { name: "Camera", price: 10, category:"electronics", location: "Seville" }
   ];
+}
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const query = urlParams.get('query')?.toLowerCase() || '';
-  const category = urlParams.get('category')?.toLowerCase() || '';
-  const locationFilter = urlParams.get('location')?.toLowerCase() || '';
+// Filter listings
+const filtered = listings.filter(item => {
+  const matchesQuery = query ? item.name.toLowerCase().includes(query) : true;
+  const matchesCategory = category ? item.category.toLowerCase() === category : true;
+  const matchesLocation = locationFilter ? item.location.toLowerCase().includes(locationFilter) : true;
+  return matchesQuery && matchesCategory && matchesLocation;
+});
 
-  const resultsContainer = document.getElementById('resultsContainer');
-
-  // Filter logic
-  const filtered = listings.filter(item => {
-    const matchesQuery = query ? item.name.toLowerCase().includes(query) : true;
-    const matchesCategory = category ? item.category === category : true; // will need category in data later
-    const matchesLocation = locationFilter ? item.location.toLowerCase().includes(locationFilter) : true;
-    return matchesQuery && matchesCategory && matchesLocation;
-  });
-
-  function displayResults(results) {
-    resultsContainer.innerHTML = '';
-    if(results.length === 0){
-      resultsContainer.innerHTML = '<p>No items found.</p>';
-      return;
-    }
-    results.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'result-item';
-      div.innerHTML = `
-        <h3>${item.name}</h3>
-        <p>€${item.price}/day</p>
-        <p>Location: ${item.location}</p>
-      `;
-      resultsContainer.appendChild(div);
-    });
-  }
-
-  displayResults(filtered);
+// Display
+if(filtered.length === 0) resultsContainer.innerHTML = '<p>No items found.</p>';
+else filtered.forEach(item => {
+  const div = document.createElement('div');
+  div.className = 'result-item';
+  div.innerHTML = `
+    <h3>${item.name}</h3>
+    <p>€${item.price}/day</p>
+    <p>Category: ${item.category}</p>
+    <p>Location: ${item.location}</p>
+  `;
+  resultsContainer.appendChild(div);
+});
 </script>
-
 </body>
 </html>
