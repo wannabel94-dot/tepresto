@@ -1,68 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Search Results - TePresto</title>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>TePresto Search Results</title>
 <style>
-body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
-header { background: #4CAF50; color: white; text-align: center; padding: 2rem 1rem; }
-main { max-width: 800px; margin: 2rem auto; padding: 1rem; }
-h1 { margin-bottom: 1rem; }
-.results { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
-.result-item { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-width: 200px; text-align: center; }
-.result-item p { margin: 0.3rem 0; }
-footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
-@media(max-width:500px){ .result-item{ min-width:100%; } }
+body { font‑family: Arial, sans‑serif; background: #fff; margin:0; padding:0; }
+.header { padding:1rem; background: #4CAF50; color:white; text‑align:center; }
+.grid { display:grid; grid‑template‑columns: repeat(auto‑fill, minmax(180px, 1fr)); gap:1rem; padding:1rem; }
+.card { background: #fff; border‑radius:8px; box‑shadow: 0 1px 3px rgba(0,0,0,0.15); overflow:hidden; cursor: pointer; }
+.card img { width:100%; height:180px; object‑fit:cover; }
+.card .info { padding: 0.5rem; }
+.card .info p { margin:0.3rem 0; font‑size:0.9rem; }
+.noresults { text‑align:center; padding:2rem; font‑size:1.1rem; color:#555; }
 </style>
 </head>
 <body>
 
-<header><h1>Search Results</h1></header>
-<main>
-  <div id="resultsContainer" class="results"></div>
-</main>
-<footer>&copy; 2026 TePresto. All rights reserved.</footer>
+<div class="header"><h2>Search Results</h2></div>
+<div id="resultsGrid" class="grid"></div>
 
 <script>
-const resultsContainer = document.getElementById('resultsContainer');
-const urlParams = new URLSearchParams(window.location.search);
-const query = urlParams.get('query')?.toLowerCase() || '';
-const category = urlParams.get('category')?.toLowerCase() || '';
-const locationFilter = urlParams.get('location')?.toLowerCase() || '';
+const grid = document.getElementById('resultsGrid');
+const params = new URLSearchParams(window.location.search);
+const q = params.get('query')?.toLowerCase() || '';
+const cat = params.get('category')?.toLowerCase() || '';
+const loc = params.get('location')?.toLowerCase() || '';
 
-let listings = JSON.parse(localStorage.getItem('listings')) || [];
+const listings = JSON.parse(localStorage.getItem('listings')) || [];
 
-// For demo: prepopulate some default listings
-if(listings.length === 0) {
-  listings = [
-    { name: "Drill", price: 5, category:"tools", location: "Madrid" },
-    { name: "Vacuum Cleaner", price: 3, category:"cleaning", location: "Barcelona" },
-    { name: "Camera", price: 10, category:"electronics", location: "Seville" }
-  ];
-}
-
-// Filter listings
 const filtered = listings.filter(item => {
-  const matchesQuery = query ? item.name.toLowerCase().includes(query) : true;
-  const matchesCategory = category ? item.category.toLowerCase() === category : true;
-  const matchesLocation = locationFilter ? item.location.toLowerCase().includes(locationFilter) : true;
-  return matchesQuery && matchesCategory && matchesLocation;
+  const mQ = q ? item.name.toLowerCase().includes(q) : true;
+  const mC = cat ? item.category.toLowerCase() === cat : true;
+  const mL = loc ? item.location.toLowerCase().includes(loc) : true;
+  return mQ && mC && mL;
 });
 
-// Display
-if(filtered.length === 0) resultsContainer.innerHTML = '<p>No items found.</p>';
-else filtered.forEach(item => {
-  const div = document.createElement('div');
-  div.className = 'result-item';
-  div.innerHTML = `
-    <h3>${item.name}</h3>
-    <p>€${item.price}/day</p>
-    <p>Category: ${item.category}</p>
-    <p>Location: ${item.location}</p>
-  `;
-  resultsContainer.appendChild(div);
-});
+if(filtered.length === 0) {
+  grid.innerHTML = '<div class="noresults">No matching items found.</div>';
+} else {
+  filtered.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <img src="${item.images[0] || 'https://via.placeholder.com/300'}" alt="${item.name}">
+      <div class="info">
+        <p><strong>€${item.price}/day</strong></p>
+        <p>${item.name}</p>
+        <p style="font-size:0.85rem;color:#555;">${item.location}</p>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
 </script>
+
 </body>
 </html>
