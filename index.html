@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TePresto</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
-    header { background: #4CAF50; color: white; text-align: center; padding: 2rem 1rem; }
-    header h1 { margin-bottom: 0.5rem; font-size: 2.2rem; }
-    main { max-width: 900px; margin: 2rem auto; padding: 0 1rem; text-align: center; }
-    .cta-button { display: inline-block; padding: 1rem 2rem; font-size: 1.2rem; background: #4CAF50; color: white; border-radius: 8px; text-decoration: none; transition: background 0.3s; margin-bottom: 2rem; }
-    .cta-button:hover { background: #45a049; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TePresto</title>
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background: #f7f7f7; }
+header { background: #4CAF50; color: white; text-align:center; padding:2rem 1rem; }
+header h1 { margin-bottom: 0.5rem; font-size:2.2rem; }
+main { max-width:900px; margin:2rem auto; padding:0 1rem; text-align:center; }
+.cta-button { display:inline-block; padding:1rem 2rem; font-size:1.2rem; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; transition:background 0.3s; margin-bottom:2rem; cursor:pointer; }
+.cta-button:hover { background:#45a049; }
 
-    .search-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
-    .search-bar input[type="text"] { flex: 1; padding: 0.8rem; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; min-width: 150px; }
-    .search-bar button { padding: 0.8rem 1.5rem; font-size: 1rem; border-radius: 5px; border: none; background: #4CAF50; color: white; cursor: pointer; transition: background 0.3s; }
-    .search-bar button:hover { background: #45a049; }
+.search-bar { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-bottom:1.5rem; }
+.search-bar input[type="text"] { flex:1; padding:0.8rem; font-size:1rem; border-radius:5px; border:1px solid #ccc; min-width:150px; }
+.search-bar button { padding:0.8rem 1.5rem; font-size:1rem; border-radius:5px; border:none; background:#4CAF50; color:white; cursor:pointer; transition:background 0.3s; }
+.search-bar button:hover { background:#45a049; }
 
-    .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 2rem; }
-    .categories button { padding: 0.8rem 1.5rem; border-radius: 5px; border: none; background: #2196F3; color: white; cursor: pointer; transition: background 0.3s; }
-    .categories button:hover { background: #1976D2; }
+.categories { display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; margin-bottom:2rem; }
+.categories button { padding:0.8rem 1.5rem; border-radius:5px; border:none; background:#2196F3; color:white; cursor:pointer; transition:background 0.3s; }
+.categories button:hover { background:#1976D2; }
 
-    .banner { background-color: #e0f7e9; padding: 2rem 0; overflow: hidden; position: relative; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 3rem; }
-    .banner-items { display: flex; gap: 2rem; white-space: nowrap; animation: scroll 20s linear infinite; }
-    .banner-item { background-color: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-width: 200px; flex: 0 0 auto; text-align: center; }
-    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.banner { background:#e0f7e9; padding:2rem 0; overflow:hidden; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin-top:3rem; }
+.banner-items { display:flex; gap:2rem; white-space:nowrap; animation:scroll 20s linear infinite; }
+.banner-item { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.1); min-width:200px; flex:0 0 auto; text-align:center; }
+@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
+footer { text-align:center; margin:2rem 0; font-size:0.9rem; color:#777; }
 
-    @media (max-width: 500px) {
-      .cta-button { width: 100%; margin-bottom: 1rem; }
-      .search-bar { flex-direction: column; }
-      .categories button { flex: 1 1 100%; }
-      .banner-item { min-width: 150px; }
-    }
-  </style>
+@media(max-width:500px){ .cta-button{ width:100%; margin-bottom:1rem; } .search-bar{ flex-direction:column; } .categories button{ flex:1 1 100%; } .banner-item{ min-width:150px; } }
+
+/* Modal styles */
+.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.5); }
+.modal-content { background:#fff; margin:10% auto; padding:2rem; border-radius:8px; width:90%; max-width:400px; position:relative; }
+.modal-content h2 { margin-bottom:1rem; }
+.modal-content input { width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:5px; border:1px solid #ccc; }
+.modal-content button { padding:0.8rem 1.5rem; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer; transition:background 0.3s; }
+.modal-content button:hover { background:#45a049; }
+.modal-content .close { position:absolute; top:10px; right:15px; font-size:1.5rem; cursor:pointer; color:#333; }
+.modal-content .create-profile { background:#2196F3; margin-top:0.5rem; }
+.modal-content .create-profile:hover { background:#1976D2; }
+</style>
 </head>
 <body>
 
@@ -44,8 +50,8 @@
 </header>
 
 <main>
-  <!-- List Item CTA -->
-  <a href="listing.html" class="cta-button">List an Item</a>
+  <!-- List Item CTA triggers login -->
+  <div class="cta-button" id="listItemBtn">List an Item</div>
 
   <!-- Search bar -->
   <div class="search-bar">
@@ -71,7 +77,6 @@
       <div class="banner-item">Ladder - €4/day</div>
       <div class="banner-item">Power Washer - €8/day</div>
       <div class="banner-item">Tent - €6/day</div>
-      <!-- Repeat for smooth scrolling -->
       <div class="banner-item">Drill - €5/day</div>
       <div class="banner-item">Vacuum Cleaner - €3/day</div>
     </div>
@@ -82,8 +87,20 @@
   &copy; 2026 TePresto. All rights reserved.
 </footer>
 
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Login</h2>
+    <input type="email" placeholder="Email" required id="loginEmail">
+    <input type="password" placeholder="Password" required id="loginPassword">
+    <button id="loginSubmit">Login</button>
+    <button class="create-profile" onclick="window.location.href='create-profile.html'">Create Profile</button>
+  </div>
+</div>
+
 <script>
-  // Search functionality → redirect to results.html
+  // Redirect search to results.html
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.getElementById('searchBtn');
 
@@ -94,16 +111,24 @@
   }
 
   searchBtn.addEventListener('click', () => goToResults(searchInput.value));
-  searchInput.addEventListener('keypress', e => { if(e.key === 'Enter') goToResults(searchInput.value); });
+  searchInput.addEventListener('keypress', e => { if(e.key==='Enter') goToResults(searchInput.value); });
 
-  // Category buttons
-  const categoryButtons = document.querySelectorAll('.categories button');
-  categoryButtons.forEach(btn => {
+  // Categories buttons
+  document.querySelectorAll('.categories button').forEach(btn => {
     btn.addEventListener('click', () => {
       const category = btn.getAttribute('data-category');
       window.location.href = `results.html?category=${category}`;
     });
   });
+
+  // Login modal logic
+  const modal = document.getElementById('loginModal');
+  const listItemBtn = document.getElementById('listItemBtn');
+  const closeModal = document.getElementById('closeModal');
+
+  listItemBtn.addEventListener('click', () => modal.style.display='block');
+  closeModal.addEventListener('click', () => modal.style.display='none');
+  window.addEventListener('click', e => { if(e.target===modal) modal.style.display='none'; });
 </script>
 
 </body>
