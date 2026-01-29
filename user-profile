@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile - TePresto</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f7f7f7; margin:0; padding:0; }
+main { max-width:800px; margin:3rem auto; padding:1rem; }
+h1 { text-align:center; margin-bottom:2rem; }
+.listings { display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; }
+.listing-item { background:white; padding:1rem; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2); min-width:200px; text-align:center; }
+.listing-item img { width:150px; height:150px; object-fit:cover; border-radius:5px; }
+.listing-item p { margin:0.3rem 0; font-size:0.9rem; }
+</style>
+</head>
+<body>
+
+<main>
+<h1>Your Profile</h1>
+<div id="userListings" class="listings"></div>
+</main>
+
+<script>
+const currentUserId = localStorage.getItem('currentUserId');
+if(!currentUserId) alert('No user logged in.');
+
+const users = JSON.parse(localStorage.getItem('users')) || [];
+const currentUser = users.find(u => u.id == currentUserId);
+const container = document.getElementById('userListings');
+
+if(currentUser && currentUser.listings.length > 0) {
+  currentUser.listings.forEach(listing => {
+    const div = document.createElement('div');
+    div.className = 'listing-item';
+    div.innerHTML = `
+      <img src="https://via.placeholder.com/150" alt="${listing.name}">
+      <p>${listing.name}</p>
+      <p>€${listing.price}/day - ${listing.location}</p>
+    `;
+    container.appendChild(div);
+  });
+} else {
+  container.innerHTML = '<p>You have no listings yet.</p>';
+}
+</script>
+
+</body>
+</html>
