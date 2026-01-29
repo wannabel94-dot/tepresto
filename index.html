@@ -5,208 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TePresto</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { background-color: #f7f7f7; color: #333; line-height: 1.6; }
-
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 2rem 1rem;
-      text-align: center;
-    }
-    header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-    header p { font-size: 1rem; }
-
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .cta-button {
-      display: inline-block;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      color: white;
-      background-color: #4CAF50;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.3s;
-      margin-bottom: 2rem;
-    }
-    .cta-button:hover { background-color: #45a049; }
-
-    .search-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-    }
-    .search-bar input[type="text"] {
-      flex: 1;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .search-bar button {
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .search-bar button:hover { background-color: #45a049; }
-
-    .results {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 3rem;
-      justify-content: center;
-    }
-    .result-item {
-      background-color: #fff;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      min-width: 200px;
-      text-align: center;
-    }
-
-    .banner {
-      background-color: #e0f7e9;
-      padding: 2rem 0;
-      overflow: hidden;
-      position: relative;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-top: 3rem;
-    }
-    .banner-items {
-      display: flex;
-      gap: 2rem;
-      white-space: nowrap;
-      animation: scroll 20s linear infinite;
-    }
-    .banner-item {
-      background-color: #fff;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      min-width: 200px;
-      flex: 0 0 auto;
-      text-align: center;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    footer {
-      text-align: center;
-      margin: 2rem 0;
-      font-size: 0.9rem;
-      color: #777;
-    }
-
-    @media (max-width: 500px) {
-      .cta-button { display: block; margin: 1rem auto; }
-      .search-bar { flex-direction: column; }
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
+    header { background: #4CAF50; color: white; text-align: center; padding: 2rem 1rem; }
+    header h1 { margin-bottom: 0.5rem; font-size: 2.2rem; }
+    main { max-width: 600px; margin: 2rem auto; padding: 1rem; text-align: center; }
+    .cta-button { display: inline-block; padding: 1rem 2rem; font-size: 1.2rem; background: #4CAF50; color: white; border-radius: 8px; text-decoration: none; transition: background 0.3s; margin-bottom: 2rem; }
+    .cta-button:hover { background: #45a049; }
+    .search-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .search-bar input[type="text"] { flex: 1; padding: 0.8rem; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; min-width: 150px; }
+    .search-bar button { padding: 0.8rem 1.5rem; font-size: 1rem; border-radius: 5px; border: none; background: #4CAF50; color: white; cursor: pointer; transition: background 0.3s; }
+    .search-bar button:hover { background: #45a049; }
+    footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
+    @media (max-width: 500px) { .search-bar { flex-direction: column; } .cta-button { width: 100%; margin-bottom: 1rem; } }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>TePresto</h1>
-    <p>Borrow or lend items easily with your community.</p>
-  </header>
+<header>
+  <h1>TePresto</h1>
+  <p>Borrow or lend items easily with your community.</p>
+</header>
 
-  <main>
-    <!-- CTA to list an item -->
-    <a href="listing.html" class="cta-button">List an Item</a>
+<main>
+  <a href="listing.html" class="cta-button">List an Item</a>
 
-    <!-- Search bar -->
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search for an item to rent...">
-      <button id="searchBtn">Search</button>
-    </div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search for an item to rent...">
+    <button id="searchBtn">Search</button>
+  </div>
+</main>
 
-    <!-- Search results -->
-    <div class="results" id="resultsContainer">
-      <!-- Search results will appear here -->
-    </div>
+<footer>
+  &copy; 2026 TePresto. All rights reserved.
+</footer>
 
-    <!-- Scrolling banner of current listings -->
-    <h2>Current Listings</h2>
-    <div class="banner">
-      <div class="banner-items" id="bannerItems">
-        <div class="banner-item">Drill - €5/day</div>
-        <div class="banner-item">Vacuum Cleaner - €3/day</div>
-        <div class="banner-item">Camera - €10/day</div>
-        <div class="banner-item">Ladder - €4/day</div>
-        <div class="banner-item">Power Washer - €8/day</div>
-        <div class="banner-item">Tent - €6/day</div>
-        <!-- Repeat for smooth scrolling -->
-        <div class="banner-item">Drill - €5/day</div>
-        <div class="banner-item">Vacuum Cleaner - €3/day</div>
-        <div class="banner-item">Camera - €10/day</div>
-      </div>
-    </div>
-  </main>
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
 
-  <footer>
-    &copy; 2026 TePresto. All rights reserved.
-  </footer>
-
-  <script>
-    // Dummy listings array
-    const listings = [
-      { name: "Drill", price: 5 },
-      { name: "Vacuum Cleaner", price: 3 },
-      { name: "Camera", price: 10 },
-      { name: "Ladder", price: 4 },
-      { name: "Power Washer", price: 8 },
-      { name: "Tent", price: 6 },
-    ];
-
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const resultsContainer = document.getElementById('resultsContainer');
-
-    function displayResults(results) {
-      resultsContainer.innerHTML = '';
-      if(results.length === 0){
-        resultsContainer.innerHTML = '<p>No items found.</p>';
-        return;
-      }
-      results.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'result-item';
-        div.textContent = `${item.name} - €${item.price}/day`;
-        resultsContainer.appendChild(div);
-      });
+  function goToResults() {
+    const query = encodeURIComponent(searchInput.value.trim());
+    if(query) {
+      window.location.href = `results.html?query=${query}`;
+    } else {
+      alert('Please enter a search term.');
     }
+  }
 
-    // Initial display: show all items
-    displayResults(listings);
-
-    // Search function
-    searchBtn.addEventListener('click', () => {
-      const query = searchInput.value.toLowerCase().trim();
-      const filtered = listings.filter(item => item.name.toLowerCase().includes(query));
-      displayResults(filtered);
-    });
-
-    // Optional: enter key triggers search
-    searchInput.addEventListener('keypress', e => {
-      if(e.key === 'Enter') searchBtn.click();
-    });
-  </script>
+  searchBtn.addEventListener('click', goToResults);
+  searchInput.addEventListener('keypress', e => {
+    if(e.key === 'Enter') goToResults();
+  });
+</script>
 
 </body>
 </html>
