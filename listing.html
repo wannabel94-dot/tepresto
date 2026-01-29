@@ -21,18 +21,16 @@ button:hover { background:#45a049; }
 </head>
 <body>
 
-<header>
-<h2>TePresto</h2>
-</header>
+<header><h2>TePresto</h2></header>
 
 <main>
 <h1>List Your Item</h1>
 <form id="rentalForm">
-  <input type="text" placeholder="Item Name" required>
-  <textarea placeholder="Item Description" rows="3" required></textarea>
-  <input type="number" placeholder="Rental Price per Day (€)" min="0" required>
-  <input type="number" placeholder="Deposit (e.g., €0 or optional security deposit)" min="0">
-  <select required>
+  <input type="text" id="itemName" placeholder="Item Name" required>
+  <textarea id="itemDescription" placeholder="Item Description" rows="3" required></textarea>
+  <input type="number" id="itemPrice" placeholder="Rental Price per Day (€)" min="0" required>
+  <input type="number" id="itemDeposit" placeholder="Deposit (optional)" min="0">
+  <select id="itemCategory" required>
     <option value="">Select Category</option>
     <option value="tools">Tools</option>
     <option value="electronics">Electronics</option>
@@ -40,73 +38,67 @@ button:hover { background:#45a049; }
     <option value="other">Other</option>
   </select>
 
-  <label>
-    <input type="checkbox" id="pickupCheckbox">
-    Allow Dropoff/Pickup
-  </label>
-
-  <!-- Location field -->
+  <label><input type="checkbox" id="pickupCheckbox"> Allow Dropoff/Pickup</label>
   <input type="text" id="itemLocation" placeholder="Item Location" required>
 
-  <!-- Image upload -->
-  <label>
-    Upload Images (at least 1 required):
-    <input type="file" id="imageUpload" accept="image/*" multiple required>
-  </label>
+  <label>Upload Images (at least 1 required): <input type="file" id="imageUpload" accept="image/*" multiple required></label>
   <div id="imagePreview"></div>
 
   <button type="submit">List Item</button>
 </form>
 </main>
 
-<footer>
-&copy; 2026 TePresto. All rights reserved.
-</footer>
+<footer>&copy; 2026 TePresto. All rights reserved.</footer>
 
-<!-- Google Maps API -->
+<!-- Google Maps API for location autocomplete -->
 <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 <script>
-  const form = document.getElementById('rentalForm');
-  const imageUpload = document.getElementById('imageUpload');
-  const imagePreview = document.getElementById('imagePreview');
+const form = document.getElementById('rentalForm');
+const imageUpload = document.getElementById('imageUpload');
+const imagePreview = document.getElementById('imagePreview');
 
-  // Image preview
-  imageUpload.addEventListener('change', () => {
-    imagePreview.innerHTML = '';
-    Array.from(imageUpload.files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = document.createElement('img');
-        img.src = e.target.result;
-        imagePreview.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-    });
+// Image preview
+imageUpload.addEventListener('change', () => {
+  imagePreview.innerHTML = '';
+  Array.from(imageUpload.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      imagePreview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
   });
+});
 
-  // Google Maps autocomplete for location
-  const locationInput = document.getElementById('itemLocation');
-  const autocomplete = new google.maps.places.Autocomplete(locationInput, {
-    types: ['geocode'] // Only addresses
-  });
+// Google Maps autocomplete
+const locationInput = document.getElementById('itemLocation');
+new google.maps.places.Autocomplete(locationInput, { types: ['geocode'] });
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    // Ensure at least one image
-    if(imageUpload.files.length === 0){
-      alert('Please upload at least one image.');
-      return;
-    }
-    // Ensure location filled
-    if(locationInput.value.trim() === ''){
-      alert('Please enter the item location.');
-      return;
-    }
-    alert('Item listed! (Functionality to connect to backend)');
-    form.reset();
-    imagePreview.innerHTML = '';
+// Handle form submission
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if(imageUpload.files.length === 0) return alert('Please upload at least one image.');
+  if(locationInput.value.trim() === '') return alert('Please enter the item location.');
+
+  // Store listing in localStorage
+  let listings = JSON.parse(localStorage.getItem('listings')) || [];
+  listings.push({
+    name: document.getElementById('itemName').value,
+    description: document.getElementById('itemDescription').value,
+    price: parseFloat(document.getElementById('itemPrice').value),
+    deposit: parseFloat(document.getElementById('itemDeposit').value) || 0,
+    category: document.getElementById('itemCategory').value,
+    pickup: document.getElementById('pickupCheckbox').checked,
+    location: locationInput.value,
+    images: Array.from(imageUpload.files).map(f => f.name) // For demo only
   });
+  localStorage.setItem('listings', JSON.stringify(listings));
+
+  alert('Item listed!');
+  form.reset();
+  imagePreview.innerHTML = '';
+});
 </script>
-
 </body>
 </html>
