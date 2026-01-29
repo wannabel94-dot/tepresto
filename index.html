@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TePresto</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background-color: #f7f7f7; color: #333; line-height: 1.6; }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1rem; }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      text-align: center;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .buttons a {
+      display: inline-block;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      color: white;
+      background-color: #4CAF50;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .buttons a:hover {
+      background-color: #45a049;
+    }
+
+    .banner {
+      background-color: #e0f7e9;
+      padding: 2rem 0;
+      overflow: hidden;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-top: 3rem;
+    }
+
+    .banner-items {
+      display: flex;
+      gap: 2rem;
+      white-space: nowrap;
+      animation: scroll 20s linear infinite;
+    }
+
+    .banner-item {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      min-width: 200px;
+      flex: 0 0 auto;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    footer {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    @media (max-width: 500px) {
+      .buttons a { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>TePresto</h1>
+    <p>Borrow or lend items easily with your community.</p>
+  </header>
+
+  <main>
+    <div class="buttons">
+      <a href="listing.html">List an Item</a>
+      <a href="borrow.html">Borrow an Item</a>
+    </div>
+
+    <h2>Current Listings</h2>
+    <div class="banner">
+      <div class="banner-items">
+        <div class="banner-item">Drill - €5/day</div>
+        <div class="banner-item">Vacuum Cleaner - €3/day</div>
+        <div class="banner-item">Camera - €10/day</div>
+        <div class="banner-item">Ladder - €4/day</div>
+        <div class="banner-item">Power Washer - €8/day</div>
+        <div class="banner-item">Tent - €6/day</div>
+        <!-- Repeat items for continuous scroll effect -->
+        <div class="banner-item">Drill - €5/day</div>
+        <div class="banner-item">Vacuum Cleaner - €3/day</div>
+        <div class="banner-item">Camera - €10/day</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 TePresto. All rights reserved.
+  </footer>
+
+</body>
+</html>
