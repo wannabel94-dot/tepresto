@@ -3,89 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Rental</title>
+  <title>TePresto</title>
   <style>
-    /* Reset some default styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background-color: #f7f7f7;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    main {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 1rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      margin-bottom: 1rem;
-      font-size: 1.8rem;
-      text-align: center;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    input, textarea, select, button {
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    footer {
-      text-align: center;
-      margin: 2rem 0;
-      font-size: 0.9rem;
-      color: #777;
-    }
-
-    /* Responsive */
-    @media (max-width: 500px) {
-      main {
-        margin: 1rem;
-        padding: 1rem;
-      }
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background-color: #f7f7f7; color: #333; line-height: 1.6; }
+    header { background-color: #4CAF50; color: white; padding: 1rem; text-align: center; }
+    main { max-width: 600px; margin: 2rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h1 { margin-bottom: 1rem; font-size: 1.8rem; text-align: center; }
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    input, textarea, select, button { padding: 0.8rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; }
+    button { background-color: #4CAF50; color: white; border: none; cursor: pointer; transition: background 0.3s; }
+    button:hover { background-color: #45a049; }
+    footer { text-align: center; margin: 2rem 0; font-size: 0.9rem; color: #777; }
+    .flex-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .flex-row input, .flex-row select { flex: 1; min-width: 120px; }
+    @media (max-width: 500px) { main { margin: 1rem; padding: 1rem; } }
   </style>
 </head>
 <body>
 
   <header>
-    <h2>Mi Rental</h2>
+    <h2>TePresto</h2>
   </header>
 
   <main>
@@ -93,7 +31,8 @@
     <form id="rentalForm">
       <input type="text" placeholder="Item Name" required>
       <textarea placeholder="Item Description" rows="3" required></textarea>
-      <input type="number" placeholder="Rental Price per Day (€)" required>
+      <input type="number" placeholder="Rental Price per Day (€)" min="0" required>
+      <input type="number" placeholder="Deposit (€)" min="0" value="0" required>
       <select required>
         <option value="">Select Category</option>
         <option value="tools">Tools</option>
@@ -101,20 +40,57 @@
         <option value="cleaning">Cleaning Equipment</option>
         <option value="other">Other</option>
       </select>
+
+      <label>
+        <input type="checkbox" id="pickupCheckbox">
+        Allow Dropoff/Pickup
+      </label>
+      <input type="number" placeholder="Dropoff/Pickup Price (€)" min="0" id="pickupPrice" disabled>
+
+      <div class="flex-row">
+        <input type="date" id="startDate" required>
+        <input type="date" id="endDate" required>
+      </div>
+
       <button type="submit">List Item</button>
     </form>
   </main>
 
   <footer>
-    &copy; 2026 Mi Rental. All rights reserved.
+    &copy; 2026 TePresto. All rights reserved.
   </footer>
 
   <script>
     const form = document.getElementById('rentalForm');
+    const pickupCheckbox = document.getElementById('pickupCheckbox');
+    const pickupPrice = document.getElementById('pickupPrice');
+
+    // Enable/disable pickup price field
+    pickupCheckbox.addEventListener('change', () => {
+      pickupPrice.disabled = !pickupCheckbox.checked;
+      if(!pickupCheckbox.checked) pickupPrice.value = '';
+    });
+
+    // Form submit
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      alert('Item listed! (Functionality to be added)');
+
+      // Validate start/end date (allow same day)
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+      if (!start || !end) {
+        alert('Please select start and end dates');
+        return;
+      }
+
+      if (end < start) {
+        alert('End date cannot be before start date');
+        return;
+      }
+
+      alert('Item listed! (Functionality to be connected to backend)');
       form.reset();
+      pickupPrice.disabled = true;
     });
   </script>
 
