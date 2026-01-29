@@ -18,21 +18,12 @@
     header p { font-size: 1rem; }
 
     main {
-      max-width: 800px;
+      max-width: 900px;
       margin: 2rem auto;
       padding: 0 1rem;
-      text-align: center;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 3rem;
-    }
-
-    .buttons a {
+    .cta-button {
       display: inline-block;
       padding: 1rem 2rem;
       font-size: 1.2rem;
@@ -41,10 +32,49 @@
       border-radius: 8px;
       text-decoration: none;
       transition: background 0.3s;
+      margin-bottom: 2rem;
     }
+    .cta-button:hover { background-color: #45a049; }
 
-    .buttons a:hover {
-      background-color: #45a049;
+    .search-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .search-bar input[type="text"] {
+      flex: 1;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .search-bar button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .search-bar button:hover { background-color: #45a049; }
+
+    .results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      justify-content: center;
+    }
+    .result-item {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      min-width: 200px;
+      text-align: center;
     }
 
     .banner {
@@ -56,14 +86,12 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       margin-top: 3rem;
     }
-
     .banner-items {
       display: flex;
       gap: 2rem;
       white-space: nowrap;
       animation: scroll 20s linear infinite;
     }
-
     .banner-item {
       background-color: #fff;
       padding: 1rem;
@@ -71,11 +99,11 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       min-width: 200px;
       flex: 0 0 auto;
+      text-align: center;
     }
-
     @keyframes scroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+      100% { transform: translateX(-50%); }
     }
 
     footer {
@@ -86,7 +114,8 @@
     }
 
     @media (max-width: 500px) {
-      .buttons a { flex: 1 1 100%; }
+      .cta-button { display: block; margin: 1rem auto; }
+      .search-bar { flex-direction: column; }
     }
   </style>
 </head>
@@ -98,21 +127,31 @@
   </header>
 
   <main>
-    <div class="buttons">
-      <a href="listing.html">List an Item</a>
-      <a href="borrow.html">Borrow an Item</a>
+    <!-- CTA to list an item -->
+    <a href="listing.html" class="cta-button">List an Item</a>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search for an item to rent...">
+      <button id="searchBtn">Search</button>
     </div>
 
+    <!-- Search results -->
+    <div class="results" id="resultsContainer">
+      <!-- Search results will appear here -->
+    </div>
+
+    <!-- Scrolling banner of current listings -->
     <h2>Current Listings</h2>
     <div class="banner">
-      <div class="banner-items">
+      <div class="banner-items" id="bannerItems">
         <div class="banner-item">Drill - €5/day</div>
         <div class="banner-item">Vacuum Cleaner - €3/day</div>
         <div class="banner-item">Camera - €10/day</div>
         <div class="banner-item">Ladder - €4/day</div>
         <div class="banner-item">Power Washer - €8/day</div>
         <div class="banner-item">Tent - €6/day</div>
-        <!-- Repeat items for continuous scroll effect -->
+        <!-- Repeat for smooth scrolling -->
         <div class="banner-item">Drill - €5/day</div>
         <div class="banner-item">Vacuum Cleaner - €3/day</div>
         <div class="banner-item">Camera - €10/day</div>
@@ -123,6 +162,51 @@
   <footer>
     &copy; 2026 TePresto. All rights reserved.
   </footer>
+
+  <script>
+    // Dummy listings array
+    const listings = [
+      { name: "Drill", price: 5 },
+      { name: "Vacuum Cleaner", price: 3 },
+      { name: "Camera", price: 10 },
+      { name: "Ladder", price: 4 },
+      { name: "Power Washer", price: 8 },
+      { name: "Tent", price: 6 },
+    ];
+
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const resultsContainer = document.getElementById('resultsContainer');
+
+    function displayResults(results) {
+      resultsContainer.innerHTML = '';
+      if(results.length === 0){
+        resultsContainer.innerHTML = '<p>No items found.</p>';
+        return;
+      }
+      results.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'result-item';
+        div.textContent = `${item.name} - €${item.price}/day`;
+        resultsContainer.appendChild(div);
+      });
+    }
+
+    // Initial display: show all items
+    displayResults(listings);
+
+    // Search function
+    searchBtn.addEventListener('click', () => {
+      const query = searchInput.value.toLowerCase().trim();
+      const filtered = listings.filter(item => item.name.toLowerCase().includes(query));
+      displayResults(filtered);
+    });
+
+    // Optional: enter key triggers search
+    searchInput.addEventListener('keypress', e => {
+      if(e.key === 'Enter') searchBtn.click();
+    });
+  </script>
 
 </body>
 </html>
